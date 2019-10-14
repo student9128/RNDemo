@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text,ART,Button } from 'react-native';
+import { View, Text,ART,Button,StatusBar } from 'react-native';
 import  ArtTest from './artTest'
 import  Wedge from './arcTest'
 
 const {Surface,Shape,Path,Group}=ART
 class HomeScreen extends Component {
+  static navigationOptions={
+    headerStyle:{
+      backgroundColor:'#9C27B0'
+    },
+    headerTintColor: '#fff',
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -14,6 +20,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{flex:1,}}>
+        <StatusBar backgroundColor='#7B1FA2'/>
         <Text> homeScreen </Text>
         <Button onPress={()=>{this.props.navigation.navigate('ReactNativeInteractionScreen')}}
         title='RN与原生交互'></Button>

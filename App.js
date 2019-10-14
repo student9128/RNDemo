@@ -18,7 +18,7 @@ const AppNavigator = createStackNavigator({
   Home:{
     screen:HomeScreen,
     navigationOptions:()=>({
-      title:'Home'
+      title:'Home',
     })
   },
   ReactNativeInteractionScreen:{
@@ -29,7 +29,23 @@ const AppNavigator = createStackNavigator({
   }
 
 },{
-  initialRouteName:'Home'
+  initialRouteName:'Home',
+  navigationOptions:({
+    headerStyle:{
+      backgroundColor:'#cd00ea'
+    }
+  }),
+  tabBarOptions:{
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+    style: {
+      backgroundColor: '#fff', // TabBar 背景色
+      paddingBottom: 0,
+      // borderTopWidth: 0.5,
+      // borderTopColor: '#ccc',
+      // margin:0
+    },
+  }
 })
 const AppContainer = createAppContainer(AppNavigator)
 
