@@ -1,12 +1,17 @@
 package com.rndemo;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -27,10 +32,12 @@ public class RNModule extends ReactContextBaseJavaModule {
     private static final String DURAION_SHORT_KEY = "SHORT";
     private static final String DURAION_LONG_KEY = "LONG";
     private ReactContext reactContext;
+    private Promise promise;
 
     public RNModule(@NonNull ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        reactContext.addActivityEventListener(activityEventListener);
     }
 
     @NonNull
@@ -75,11 +82,48 @@ public class RNModule extends ReactContextBaseJavaModule {
         }
 
     }
+
     @ReactMethod
-    public void sendEvent(){
+    public void sendEvent() {
         WritableMap map = Arguments.createMap();
-        map.putString("content","消息来自Native");
+        map.putString("content", "消息来自Native");
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("toRN",map);
+                .emit("toRN", map);
     }
+
+    @ReactMethod
+    public void startActivity(String name, Promise promise) {
+        Activity currentActivity = getCurrentActivity();
+        if (currentActivity == null) {
+            promise.reject("noActivity", "Activity doesn't exit");
+            return;
+        }
+        this.promise = promise;
+        try {
+            Class toActivity = Class.forName(name);
+            Intent intent = new Intent(currentActivity, toActivity);
+            currentActivity.startActivityForResult(intent, 0);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private final ActivityEventListener activityEventListener = new BaseActivityEventListener() {
+        @Override
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(activity, requestCode, resultCode, data);
+            if (requestCode == 0) {
+                if (promise != null) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        String result = data.getStringExtra("result");
+                        promise.resolve(result);
+                    } else {
+                        promise.reject("failed", "failed");
+                    }
+                }
+            }
+        }
+    };
 }

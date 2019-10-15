@@ -89,6 +89,13 @@ componentDidMount(){
           onPress={() => {
             RNModule.sendEvent()
           }} />
+        <TextButton title='StartActivityForResult'
+          onPress={() => {
+            RNModule.startActivity('com.rndemo.NextActivity')
+            .then((x)=>{
+              alert(x)
+            })
+          }} />
       </View>
     );
   }
