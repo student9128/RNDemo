@@ -25,6 +25,6 @@ public class RNPackage implements ReactPackage {
     @NonNull
     @Override
     public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Arrays.asList(new TextViewManager());
     }
 }

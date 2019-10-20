@@ -14,6 +14,7 @@ const RNModule = NativeModules.RNModule
 import TextButton from './common/TextButton';
 import Colors from './common/colors'
 import { deviceWidth, realDeviceHeight } from './common/Utils';
+import TextView from './components/TextView'
 /**
  * RN与原生交互
  */
@@ -96,6 +97,7 @@ componentDidMount(){
               alert(x)
             })
           }} />
+          <TextView text='I am native widget' style={{width:deviceWidth(),height:100,backgroundColor:Colors.colorAccent}}/>
       </View>
     );
   }
