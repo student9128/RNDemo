@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text,ART,Button,StatusBar } from 'react-native';
 import  ArtTest from './artTest'
 import  Wedge from './arcTest'
+import TextButton from './common/TextButton';
 
 const {Surface,Shape,Path,Group}=ART
 class HomeScreen extends Component {
@@ -14,10 +15,9 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{flex:1,}}>
-        <StatusBar backgroundColor='#7B1FA2'/>
-        <Text> homeScreen </Text>
-        <Button onPress={()=>{this.props.navigation.navigate('ReactNativeInteractionScreen')}}
-        title='RN与原生交互'></Button>
+        {/* <StatusBar backgroundColor='#7B1FA2'/> */}
+        <TextButton onPress={()=>{this.props.navigation.navigate('ReactNativeInteractionScreen')}}
+        title='RN与原生交互'></TextButton>
         {/* <Surface width={100} height={100}>
         <ArtTest
          outerRadius={50}

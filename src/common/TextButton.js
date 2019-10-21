@@ -37,11 +37,12 @@ export default TextButton;
 const Styles = StyleSheet.create({
   containerStyle: {
     alignSelf: 'flex-start',
-    paddingStart: 10, paddingEnd: 10,
+    paddingStart: 15, paddingEnd: 15,
     borderRadius: 5,
     paddingTop: 5,
     paddingBottom: 5,
-    margin:5,
+    marginVertical:5,
+    marginHorizontal:15,
     backgroundColor: Colors.colorAccent
   },
   textStyle: {

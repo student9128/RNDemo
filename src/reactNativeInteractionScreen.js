@@ -27,32 +27,26 @@ class ReactNativeInteractionScreen extends Component {
   }
   async usePromise() {
     try {
-      const { content } = await RNModule.usePromise(this.state.textValue+'第二个')
+      const { content } = await RNModule.usePromise(this.state.textValue + '(二)')
       alert(content)
     } catch (e) {
       console.error(e)
     }
   }
-componentDidMount(){
-  const eventEmitter = new NativeEventEmitter(RNModule)
-  eventEmitter.addListener('toRN',(event)=>{
-    alert(event.content)
-  })
+  componentDidMount() {
+    const eventEmitter = new NativeEventEmitter(RNModule)
+    eventEmitter.addListener('toRN', (event) => {
+      alert(event.content)
+    })
 
-}
+  }
   render() {
     return (
-      <View>
-        <Text> reactNativeInteractionScreen </Text>
+      <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', }}>
         <TouchableNativeFeedback
           onPress={() => { RNModule.showToast('abs', RNModule.SHORT) }}>
-          <View style={{
-            backgroundColor: 'red', alignSelf: 'flex-start',
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            borderRadius: 5
-          }}>
-            <Text>showToast</Text>
+          <View style={styles.toastViewStyle}>
+            <Text style={{ color: 'white' }}>showToast</Text>
           </View>
         </TouchableNativeFeedback>
         <TextInput
@@ -62,6 +56,7 @@ componentDidMount(){
           style={styles.textInputStyle}
           underlineColorAndroid="transparent"
           maxLength={18}
+          placeholder='输入内容点击下面的按钮试试效果，1为true'
           onChangeText={(text) => this.state.textValue = text} />
         <TextButton title='通过callback和原生交互'
           onPress={() => {
@@ -82,7 +77,7 @@ componentDidMount(){
                 alert(x.content)
               })
           }} />
-        <TextButton title='通过Promise和原生交互'
+        <TextButton title='通过Promise和原生交互(二)'
           onPress={() => {
             this.usePromise()
           }} />
@@ -93,11 +88,11 @@ componentDidMount(){
         <TextButton title='StartActivityForResult'
           onPress={() => {
             RNModule.startActivity('com.rndemo.NextActivity')
-            .then((x)=>{
-              alert(x)
-            })
+              .then((x) => {
+                alert(x)
+              })
           }} />
-          <TextView text='I am native widget' style={{width:deviceWidth(),height:100,backgroundColor:Colors.colorAccent}}/>
+        <TextView text='I am native widget' style={{ width: deviceWidth(), height: 100, backgroundColor: Colors.colorAccent }} />
       </View>
     );
   }
@@ -106,12 +101,21 @@ componentDidMount(){
 export default ReactNativeInteractionScreen;
 
 const styles = StyleSheet.create({
+  toastViewStyle: {
+    backgroundColor: Colors.colorAccent, alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
   textInputStyle: {
     borderColor: Colors.colorPrimary,
     borderWidth: 2,
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 5,
-    width: deviceWidth() - 30
+    width: deviceWidth() - 30,
+    marginHorizontal: 15,
   }
 })
