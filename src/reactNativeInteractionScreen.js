@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Button,
   TouchableNativeFeedback,
   TextInput,
   NativeModules,
   StyleSheet,
   NativeEventEmitter,
-  DeviceEventEmitter
+  UIManager,
+  findNodeHandle
 } from 'react-native';
 const RNModule = NativeModules.RNModule
 import TextButton from './common/TextButton';
@@ -43,6 +43,10 @@ class ReactNativeInteractionScreen extends Component {
   _onClick = (msg) => {
     // RNModule.showToast(event.nativeEvent.message, RNModule.SHORT)
     RNModule.showToast(msg, RNModule.SHORT)
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.nativeText),'1',[Colors.white]
+    )
+    
   }
   render() {
     return (
@@ -97,7 +101,8 @@ class ReactNativeInteractionScreen extends Component {
               })
           }} />
         <TextView text='I am native widget，try click me' style={{ width: deviceWidth(), height: 100, backgroundColor: Colors.colorAccent }}
-          onClick={(msg) => { this._onClick(msg) }} />
+          onClick={(msg) => { this._onClick(msg) }}
+          ref={v=>this.nativeText=v} />
       </View>
     );
   }

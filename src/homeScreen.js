@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,ART,Button,StatusBar } from 'react-native';
-import  ArtTest from './artTest'
-import  Wedge from './arcTest'
+import { View,ART } from 'react-native';
 import TextButton from './common/TextButton';
 
 const {Surface,Shape,Path,Group}=ART
