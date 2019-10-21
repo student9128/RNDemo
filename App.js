@@ -1,6 +1,13 @@
 
 import React, { Component } from 'react'
-import { Text, View,StatusBar,StyleSheet,Button} from 'react-native'
+import { Text, 
+  View,
+  StatusBar,
+  StyleSheet,
+  Button,
+  Easing,
+Animated,
+I18nManager} from 'react-native'
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import TestScreen from './src/testScreen'
@@ -30,8 +37,6 @@ const AppNavigator = createStackNavigator({
 
 },{
   initialRouteName:'Home',
-  animationEnabled:true,
-  gestureEnabled:true,
   defaultNavigationOptions:({
     headerStyle:{
       backgroundColor:Colors.colorPrimary,
@@ -44,10 +49,40 @@ const AppNavigator = createStackNavigator({
       alignSelf:'center',
     },
     headerTintColor:'white',
-
+    gesturesEnabled:true,
+    gestureResponseDistance:{horizontal:50}
   }),
-  mode:'card',
-  headerMode:'screen',
+  mode:'card',//平台默认切换动画
+  headerMode:'float',//侧滑返回用float,切换的时候用screen效果相对较好
+  transitionConfig:()=>({
+    transitionSpec:{
+      duration:500,
+      easing:Easing.out(Easing.poly(4)),
+      timing:Animated.timing,
+      useNativeDriver: true,
+    },
+    screenInterpolator:sceneProps=>{
+      const {layout,position,scene} = sceneProps
+      const {index}=scene
+      const height =layout.initHeight
+      const width =layout.initWidth
+      const translateY = position.interpolate({
+        inputRange:[index-1,index,index+1],
+        outputRange:[height,0,0]
+      })
+      const translateX=position.interpolate({
+        inputRange:[index-1,index,index+1],
+        outputRange:I18nManager.isRTL?[-width,0,width*0.3]:[width,0,width*-0.3],
+        extrapolate:'clamp'
+      })
+      const opacity = position.interpolate({
+        inputRange:[index-1,index-0.99,index,index+0.99,index+1],
+        outputRange:[0,1,1,0.85,0]
+      })
+      return{opacity,transform:[{translateX}]}
+    }
+  })
+  
   // tabBarOptions:{
   //   activeTintColor: 'tomato',
   //   inactiveTintColor: 'gray',
