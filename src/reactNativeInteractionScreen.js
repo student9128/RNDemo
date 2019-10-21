@@ -40,6 +40,10 @@ class ReactNativeInteractionScreen extends Component {
     })
 
   }
+  _onClick = (msg) => {
+    // RNModule.showToast(event.nativeEvent.message, RNModule.SHORT)
+    RNModule.showToast(msg, RNModule.SHORT)
+  }
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', }}>
@@ -92,7 +96,8 @@ class ReactNativeInteractionScreen extends Component {
                 alert(x)
               })
           }} />
-        <TextView text='I am native widget' style={{ width: deviceWidth(), height: 100, backgroundColor: Colors.colorAccent }} />
+        <TextView text='I am native widget，try click me' style={{ width: deviceWidth(), height: 100, backgroundColor: Colors.colorAccent }}
+          onClick={(msg) => { this._onClick(msg) }} />
       </View>
     );
   }

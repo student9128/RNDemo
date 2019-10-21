@@ -9,16 +9,20 @@ class TextView extends Component {
     }
     constructor(props) {
         super(props);
-        this.state = {
-        };
+    }
+    //如果这里不封装，可以直接在使用的地方调用
+    _onClick(event) {
+        if (!this.props.onClick) {
+            return
+        }
+        this.props.onClick(event.nativeEvent.message)
     }
 
     render() {
-        const { text, color,style } = this.props
+        const { text, color, style } = this.props
         return (
-            <NativeTextView text={text}
-                color={color}
-                style={style}>
+            <NativeTextView {...this.props}
+                onClick={(e) => this._onClick(e)}>
             </NativeTextView>
         );
     }

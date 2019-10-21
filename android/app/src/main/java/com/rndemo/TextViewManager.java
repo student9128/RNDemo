@@ -1,14 +1,22 @@
 package com.rndemo;
 
 import android.graphics.Color;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.text.ReactTextView;
+
+import java.util.Map;
 
 /**
  * Created by Kevin on 2019-10-20<br/>
@@ -16,6 +24,8 @@ import com.facebook.react.views.text.ReactTextView;
  */
 public class TextViewManager extends SimpleViewManager<TextView> {
     public static final String REACT_CLASS = "TextView";
+    public static final String CLICK_EVENT = "tv_click_event";
+
     @NonNull
     @Override
     public String getName() {
@@ -25,16 +35,51 @@ public class TextViewManager extends SimpleViewManager<TextView> {
     @NonNull
     @Override
     protected TextView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new TextView(reactContext);
+        TextView textView = new TextView(reactContext);
+//        textView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                WritableMap map = Arguments.createMap();
+//                map.putString("message","you clicked me");
+//                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(textView.getId(),CLICK_EVENT,map);
+//            }
+//        });
+        return textView;
     }
 
-    @ReactProp(name ="color")
-    public void setTextColor(TextView view,String color){
+    @ReactProp(name = "color")
+    public void setTextColor(TextView view, String color) {
         view.setTextColor(Color.parseColor(color));
 
     }
+
     @ReactProp(name = "text")
-    public void setText(TextView view,String text){
+    public void setText(TextView view, String text) {
         view.setText(text);
+    }
+
+    @Nullable
+    @Override
+    public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+        return MapBuilder.<String, Object>builder()
+                .put(CLICK_EVENT, MapBuilder.of("phasedRegistrationNames",
+                        MapBuilder.of("bubbled", "onClick"))).build();
+    }
+
+    /**
+     * 不写改方法的时候就直接在 createViewInstance 添加点击事件，效果是一样的
+     * @param reactContext
+     * @param view
+     */
+    @Override
+    protected void addEventEmitters(@NonNull ThemedReactContext reactContext, @NonNull TextView view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WritableMap map = Arguments.createMap();
+                map.putString("message","okay,you clicked me with addEventEmitters");
+                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(),CLICK_EVENT,map);
+            }
+        });
     }
 }

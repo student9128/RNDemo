@@ -14,7 +14,7 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <View style={{flex:1,}}>
+      <View style={{flex:1,flexDirection:'row',flexWrap: 'wrap',}}>
         <TextButton onPress={()=>{this.props.navigation.navigate('ReactNativeInteractionScreen')}}
         title='RN与原生交互'></TextButton>
         <TextButton onPress={()=>{this.props.navigation.navigate('ReactNavigationScreen')}}
