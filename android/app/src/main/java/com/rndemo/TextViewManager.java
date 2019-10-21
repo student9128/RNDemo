@@ -76,11 +76,6 @@ public class TextViewManager extends SimpleViewManager<TextView> {
                 .put(CLICK_EVENT, MapBuilder.of("registrationName", "onClick")).build();
     }
 
-    @Override
-    public Map<String, String> getNativeProps() {
-        return super.getNativeProps();
-    }
-
 
      // 不写改方法的时候就直接在 createViewInstance 添加点击事件，效果是一样的
     @Override
@@ -101,7 +96,7 @@ public class TextViewManager extends SimpleViewManager<TextView> {
         return MapBuilder.of(SET_COLOR_NAME, SET_COLOR_ID);
     }
 
-   // 这里遇到一个问题就是，getCommandsMap接收的 id 是Integer类型，receiveCommand返回的 id 是String类型
+   // 这里一个情况就是，getCommandsMap接收的 id 是Integer类型，receiveCommand返回的 id 是String类型
     @Override
     public void receiveCommand(@NonNull TextView root, String commandId, @Nullable ReadableArray args) {
         switch (Integer.valueOf(commandId)) {
