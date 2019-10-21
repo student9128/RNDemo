@@ -15,6 +15,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TestScreen from './src/testScreen'
 import HomeScreen from './src/homeScreen'
 import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
+import ReactNavigationScreen from './src/reactNavigationScreen';
 import Colors from './src/common/colors';
 const AppNavigator = createStackNavigator({
   Test: {
@@ -27,13 +28,19 @@ const AppNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: () => ({
-      title: 'Home',
+      title: 'RNDemo',
     })
   },
   ReactNativeInteractionScreen: {
     screen: ReactNativeInteractionScreen,
     navigationOptions: () => ({
       title: 'ReactNativeInteractionScreen'
+    })
+  },
+  ReactNavigationScreen:{
+    screen:ReactNavigationScreen,
+    navigationOptions:()=>({
+      title:'ReactNavigationScreen'
     })
   }
 

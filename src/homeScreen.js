@@ -15,9 +15,10 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{flex:1,}}>
-        {/* <StatusBar backgroundColor='#7B1FA2'/> */}
         <TextButton onPress={()=>{this.props.navigation.navigate('ReactNativeInteractionScreen')}}
         title='RN与原生交互'></TextButton>
+        <TextButton onPress={()=>{this.props.navigation.navigate('ReactNavigationScreen')}}
+        title='react-navigation的使用'/>
         {/* <Surface width={100} height={100}>
         <ArtTest
          outerRadius={50}
