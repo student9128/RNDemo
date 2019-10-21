@@ -5,12 +5,6 @@ import  Wedge from './arcTest'
 
 const {Surface,Shape,Path,Group}=ART
 class HomeScreen extends Component {
-  static navigationOptions={
-    headerStyle:{
-      backgroundColor:'#9C27B0'
-    },
-    headerTintColor: '#fff',
-  }
   constructor(props) {
     super(props);
     this.state = {
