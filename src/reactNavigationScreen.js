@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text,Image } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, Image } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createAppContainer } from 'react-navigation';
-import {  } from 'react-navigation';
 
 class SettingsScreen extends React.Component {
   render() {
@@ -33,21 +31,39 @@ class ReactNavigationScreen extends Component {
   render() {
     return (
       <View>
-         <Icon.Button name="facebook" backgroundColor="#3b5998"></Icon.Button>
+        <Icon.Button name="facebook" backgroundColor="#3b5998"></Icon.Button>
         <Text> reactNavigationScreen </Text>
       </View>
     );
   }
 }
 const TabNavigator = createBottomTabNavigator({
-  Home:HomeScreen,
-  SettingsScreen:SettingsScreen
-},{
-  defaultNavigationOptions:({navigation})=>({
-
-  })
+  Home: HomeScreen,
+  Settings: SettingsScreen,
+}, {
+  defaultNavigationOptions: ({ navigation }) => ({
+    tabBarIcon: ({ focused, horizontal, tintColor }) => {
+      const { routeName } = navigation.state
+      let iconName;
+      if (routeName === 'Home') {
+        iconName = 'md-home';
+      } else if (routeName === 'Settings') {
+        iconName = 'md-settings';
+      }
+      return <Icon name={iconName} size={25} color={tintColor} />
+    }
+  }),
+  tabBarOptions: {
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+  },
 })
+TabNavigator.navigationOptions = ({ navigation }) => {
+  const { routeName } = navigation.state.routes[navigation.state.index]
+  const headerTitle = routeName
+  return {
+    headerTitle
+  }
+}
 
-// export default ReactNavigationScreen;
-// export default createAppContainer(TabNavigator);
 export default TabNavigator;
