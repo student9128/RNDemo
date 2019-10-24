@@ -66,7 +66,6 @@ const AppNavigator = createStackNavigator({
       flex: 1,
       textAlign: 'center',
       alignSelf: 'center',
-      backgroundColor:'green'
     },
     headerTintColor: 'white',
     gesturesEnabled: true,
