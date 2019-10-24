@@ -16,6 +16,7 @@ import TestScreen from './src/testScreen'
 import HomeScreen from './src/homeScreen'
 import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
 import ReactNavigationScreen from './src/reactNavigationScreen';
+import SceneOneScreen from './src/react-navigation/normal'
 import Colors from './src/common/colors';
 const AppNavigator = createStackNavigator({
   Test: {
@@ -29,12 +30,13 @@ const AppNavigator = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: () => ({
       title: 'RNDemo',
+      headerRight:null
     })
   },
   ReactNativeInteractionScreen: {
     screen: ReactNativeInteractionScreen,
     navigationOptions: () => ({
-      title: 'ReactNativeInteractionScreen'
+      title: 'ReactNativeInteractionScreen',
     })
   },
   ReactNavigationScreen:{
@@ -42,6 +44,9 @@ const AppNavigator = createStackNavigator({
     navigationOptions:()=>({
       title:'ReactNavigationScreen'
     })
+  },
+  SceneOne:{
+    screen:SceneOneScreen
   }
 
 }, {
@@ -49,13 +54,19 @@ const AppNavigator = createStackNavigator({
   defaultNavigationOptions: ({
     headerStyle: {
       backgroundColor: Colors.colorPrimary,
+
     },
+    headerRight:(<View style={{  height: 24,
+      width: 48,
+      transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
+      }}></View>),
     headerTitleStyle: {
       color: 'white',
       fontSize: 20,
       flex: 1,
       textAlign: 'center',
       alignSelf: 'center',
+      backgroundColor:'green'
     },
     headerTintColor: 'white',
     gesturesEnabled: true,
