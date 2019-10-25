@@ -17,6 +17,7 @@ import HomeScreen from './src/homeScreen'
 import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
 import ReactNavigationScreen from './src/reactNavigationScreen';
 import SceneOneScreen from './src/react-navigation/normal'
+import SceneTwoScreen from './src/react-navigation/sceneTwo'
 import Colors from './src/common/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 const AppNavigator = createStackNavigator({
@@ -31,7 +32,7 @@ const AppNavigator = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: () => ({
       title: 'RNDemo',
-      headerRight:null
+      headerRight: null
     })
   },
   ReactNativeInteractionScreen: {
@@ -40,14 +41,20 @@ const AppNavigator = createStackNavigator({
       title: 'ReactNativeInteractionScreen',
     })
   },
-  ReactNavigationScreen:{
-    screen:ReactNavigationScreen,
-    navigationOptions:()=>({
-      title:'ReactNavigationScreen'
+  ReactNavigationScreen: {
+    screen: ReactNavigationScreen,
+    navigationOptions: () => ({
+      title: 'ReactNavigationScreen'
     })
   },
-  SceneOne:{
-    screen:SceneOneScreen
+  SceneOne: {
+    screen: SceneOneScreen
+  },
+  SceneTwo: {
+    screen: SceneTwoScreen,
+    navigationOptions: () => ({
+      header: null
+    })
   }
 
 }, {
@@ -62,10 +69,11 @@ const AppNavigator = createStackNavigator({
     //   width: 48,
     //   transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
     //   }}><Icon name={'md-arrow-back'} size={25} color={'white'} /></View>),
-    headerRight:(<View style={{  height: 24,
+    headerRight: (<View style={{
+      height: 24,
       width: 48,
       transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-      }}></View>),
+    }}></View>),
     headerTitleStyle: {
       color: 'white',
       fontSize: 20,
@@ -76,6 +84,7 @@ const AppNavigator = createStackNavigator({
     headerTintColor: 'white',
     gesturesEnabled: true,
     gestureResponseDistance: { horizontal: 50 },
+    headerPressColorAndroid:'transparent'//去掉安卓返回键点击水波纹效果
   }),
   mode: 'card',//平台默认切换动画
   headerMode: 'float',//侧滑返回用float,切换的时候用screen效果相对较好

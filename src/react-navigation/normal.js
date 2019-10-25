@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../common/colors'
 import TextButton from '../common/TextButton'
 import { StackActions,NavigationActions } from 'react-navigation';
+import IconWithBadge  from '../common/IconWithBadge'
 class SettingsScreen extends React.Component {
   render() {
     return (
@@ -36,13 +37,16 @@ const TabNavigator = createBottomTabNavigator({
   defaultNavigationOptions: ({ navigation }) => ({
     tabBarIcon: ({ focused, horizontal, tintColor }) => {
       const { routeName } = navigation.state
+      let badgeCount = 0
       let iconName;
       if (routeName === 'Home') {
         iconName = 'md-home';
+        badgeCount=9
       } else if (routeName === 'Settings') {
         iconName = 'md-settings';
+        badgeCount=0
       }
-      return <Icon name={iconName} size={25} color={tintColor} />
+      return <IconWithBadge name={iconName} size={25} color={tintColor} badgeCount={badgeCount}/>
     }
   }),
   tabBarOptions: {
