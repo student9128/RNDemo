@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import Colors from '../common/colors'
+import TextButton from '../common/TextButton'
+import { StackActions,NavigationActions } from 'react-navigation';
 class SettingsScreen extends React.Component {
   render() {
     return (
@@ -13,9 +16,15 @@ class SettingsScreen extends React.Component {
 }
 class HomeScreen extends React.Component {
   render() {
+    const resetAction = StackActions.reset({
+  index:0,//index值actions中括号里面的参数下标
+  actions:[NavigationActions.navigate({routeName:'Home'})]
+    })
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1,justifyContent:'center',alignItems: 'center' }}>
         <Text>Home!</Text>
+        <TextButton title='resetAction' onPress={()=>{this.props.navigation.dispatch(resetAction)}}/>
+        <TextButton title='popToTop' onPress={()=>{this.props.navigation.dispatch(StackActions.popToTop())}}/>
       </View>
     );
   }
@@ -37,8 +46,8 @@ const TabNavigator = createBottomTabNavigator({
     }
   }),
   tabBarOptions: {
-    activeTintColor: 'tomato',
-    inactiveTintColor: 'gray',
+    activeTintColor: Colors.colorPrimary,
+    inactiveTintColor: Colors.gray,
   },
 })
 TabNavigator.navigationOptions = ({ navigation }) => {

@@ -18,6 +18,7 @@ import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
 import ReactNavigationScreen from './src/reactNavigationScreen';
 import SceneOneScreen from './src/react-navigation/normal'
 import Colors from './src/common/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 const AppNavigator = createStackNavigator({
   Test: {
     screen: TestScreen,
@@ -56,6 +57,11 @@ const AppNavigator = createStackNavigator({
       backgroundColor: Colors.colorPrimary,
 
     },
+    // headerLeft:(<View style={{  height: 24,alignItems:'center',
+    // backgroundColor:'red',
+    //   width: 48,
+    //   transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
+    //   }}><Icon name={'md-arrow-back'} size={25} color={'white'} /></View>),
     headerRight:(<View style={{  height: 24,
       width: 48,
       transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
@@ -69,7 +75,7 @@ const AppNavigator = createStackNavigator({
     },
     headerTintColor: 'white',
     gesturesEnabled: true,
-    gestureResponseDistance: { horizontal: 50 }
+    gestureResponseDistance: { horizontal: 50 },
   }),
   mode: 'card',//平台默认切换动画
   headerMode: 'float',//侧滑返回用float,切换的时候用screen效果相对较好

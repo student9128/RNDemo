@@ -3,5 +3,6 @@ export default Colors={
     colorPrimaryDark:'#7B1FA2',
     colorAccent:'#BB86FC',
     white:'#FFFFFF',
-    black:'#000000'
+    black:'#000000',
+    gray:'#9E9E9E'
 }
