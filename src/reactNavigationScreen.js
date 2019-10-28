@@ -17,6 +17,8 @@ class ReactNavigationScreen extends Component {
         onPress={()=>{this.props.navigation.navigate('SceneOne')}}/>
         <TextButton title='使用场景二'
         onPress={()=>{this.props.navigation.navigate('SceneTwo')}}/>
+        <TextButton title='使用场景三'
+        onPress={()=>{this.props.navigation.navigate('ScreenOne')}}/>
       </View>
     );
   }
