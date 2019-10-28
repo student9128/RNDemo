@@ -19,6 +19,8 @@ class ReactNavigationScreen extends Component {
         onPress={()=>{this.props.navigation.navigate('SceneTwo')}}/>
         <TextButton title='使用场景三'
         onPress={()=>{this.props.navigation.navigate('ScreenOne')}}/>
+        <TextButton title='传参'
+        onPress={()=>{this.props.navigation.navigate('ParamScreen',{params:'Hello,Navigation~'})}}/>
       </View>
     );
   }

@@ -20,6 +20,7 @@ import SceneOneScreen from './src/react-navigation/normal'
 import SceneTwoScreen from './src/react-navigation/sceneTwo'
 import Colors from './src/common/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ParamScreen from './src/react-navigation/paramScreen'
 import ScreenModule from './src/screens-module/index'
 const AppNavigator = createStackNavigator({
   ...ScreenModule,
@@ -56,6 +57,12 @@ const AppNavigator = createStackNavigator({
     screen: SceneTwoScreen,
     navigationOptions: () => ({
       header: null
+    })
+  },
+  ParamScreen:{
+    screen:ParamScreen,
+    navigationOptions: () => ({
+      title: 'ParamScreen'
     })
   }
 
