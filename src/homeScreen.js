@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View,ART } from 'react-native';
 import TextButton from './common/TextButton';
 
+import LinearView from './components/linearView'
 const {Surface,Shape,Path,Group}=ART
 class HomeScreen extends Component {
   constructor(props) {
@@ -17,6 +18,9 @@ class HomeScreen extends Component {
         title='RN与原生交互'></TextButton>
         <TextButton onPress={()=>{this.props.navigation.navigate('ReactNavigationScreen')}}
         title='react-navigation的使用'/>
+        <TextButton onPress={()=>{this.props.navigation.navigate('AlbumScreen')}}
+        title='自定义相册'/>
+ 
         {/* <Surface width={100} height={100}>
         <ArtTest
          outerRadius={50}

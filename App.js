@@ -16,12 +16,14 @@ import TestScreen from './src/testScreen'
 import HomeScreen from './src/homeScreen'
 import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
 import ReactNavigationScreen from './src/reactNavigationScreen';
+import AlbumScreen from './src/albumScreen';
 import SceneOneScreen from './src/react-navigation/normal'
 import SceneTwoScreen from './src/react-navigation/sceneTwo'
 import Colors from './src/common/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ParamScreen from './src/react-navigation/paramScreen'
 import ScreenModule from './src/screens-module/index'
+
 const AppNavigator = createStackNavigator({
   ...ScreenModule,
   Test: {
@@ -64,6 +66,13 @@ const AppNavigator = createStackNavigator({
     navigationOptions: () => ({
       title: 'ParamScreen'
     })
+  },
+  AlbumScreen:{
+    screen:AlbumScreen,
+    navigationOptions: () => ({
+      title: '自定义相册'
+    })
+
   }
 
 }, {
