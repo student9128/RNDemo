@@ -14,6 +14,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
  */
 public class AlbumLayout extends ViewGroupManager<AlbumView> {
     public static final String REACT_CLASS = "Album";
+
     @NonNull
     @Override
     public String getName() {

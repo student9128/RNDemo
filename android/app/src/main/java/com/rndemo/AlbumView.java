@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -75,12 +76,18 @@ public class AlbumView extends LinearLayout {
         //添加RecyclerView
         LayoutParams lp = new LayoutParams(-1, -1);
         mRecyclerView.setLayoutParams(lp);
-        linearLayoutManager = new GridLayoutManager(context,4);
+        linearLayoutManager = new GridLayoutManager(context, 4);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(adapter);
         addView(mRecyclerView);
-        getImages();
-
+//        getImages();
+        getAllImages(context, new AlbumCallback() {
+            @Override
+            public void onSuccess(ArrayList<AlbumEntity> albumList) {
+                //刷新视图
+                adapter.updateData(albumList);
+            }
+        });
     }
 
     Handler mHandler = new Handler() {
@@ -183,6 +190,70 @@ public class AlbumView extends LinearLayout {
                 mHandler.sendEmptyMessage(1);
             }
         }).start();
+    }
+
+    public static void getAllImages(Context context, AlbumCallback callback) {
+        new MultiAsynTask<Void, Void, ArrayList<AlbumEntity>>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Log.d("Album", "pre");
+            }
+
+            @Override
+            protected ArrayList<AlbumEntity> doInBackground(Void... voids) {
+                ArrayList<AlbumEntity> albumEntityList = new ArrayList<>();
+                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                ContentResolver contentResolver = context.getContentResolver();
+//                Cursor cursor = contentResolver.query(mImageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " +
+//                                MediaStore.Images.Media.MIME_TYPE + "=? or " +
+//                                MediaStore.Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/jpg", "image/png"},
+//                        MediaStore.Images.Media.DATE_ADDED + " DESC");
+                Cursor cursor1 = contentResolver.query(mImageUri, new String[]{"COUNT(*) "}, MediaStore.Images.Media.MIME_TYPE + "=? or " +
+                                MediaStore.Images.Media.MIME_TYPE + "=? or " +
+                                MediaStore.Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/jpg", "image/png"},
+                        MediaStore.Images.Media.DATE_ADDED + " DESC");
+                if (cursor1 == null) return null;
+                cursor1.moveToFirst();
+                int photoCount = cursor1.getInt(0);
+                Log.d("AlbumView", "count---" + photoCount);
+                //一次扫描500张
+//                String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
+                int index = 0;
+                while (index < photoCount) {
+                    String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC limit " + index + ",500";
+                    Cursor cursor = contentResolver.query(mImageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " +
+                                    MediaStore.Images.Media.MIME_TYPE + "=? or " +
+                                    MediaStore.Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/jpg", "image/png"},
+                            sortOrder);
+                    index += cursor.getCount();
+                    while (cursor.moveToNext()) {
+                        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));// 1.获取图片的路径
+                        AlbumEntity albumEntity = new AlbumEntity();
+                        albumEntity.url = path;
+                        albumEntityList.add(albumEntity);
+                    }
+                    cursor.close();
+                }
+
+                return albumEntityList;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<AlbumEntity> albumEntities) {
+                super.onPostExecute(albumEntities);
+                if (albumEntities == null || albumEntities.size() == 0) {
+                    return;
+                }
+                Toast.makeText(context,"完成了",Toast.LENGTH_SHORT).show();
+                Log.d("Album", "over");
+                callback.onSuccess(albumEntities);
+            }
+        }.executeX();
+    }
+
+    public interface AlbumCallback {
+        void onSuccess(ArrayList<AlbumEntity> albumList);
     }
 
 }

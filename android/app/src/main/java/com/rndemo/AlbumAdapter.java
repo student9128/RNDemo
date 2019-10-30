@@ -63,4 +63,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             tvItem = itemView.findViewById(R.id.iv_image);
         }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        //当集合数据为0或null的时候，返回占位图,数据正在加载中... TYPE_EMPTY
+        return super.getItemViewType(position);
+    }
 }
