@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +26,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         this.context = context;
         this.uriList = uriList;
     }
-    public void updateData(List<AlbumEntity> d){
+
+    public void updateData(List<AlbumEntity> d) {
         uriList.addAll(d);
         notifyDataSetChanged();
     }
@@ -47,6 +48,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 .placeholder(R.mipmap.ic_launcher_round)
 //                .override(200,200)
                 .into(holder.tvItem);
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onAlbumItemClick(position);
+                }
+            }
+        });
 
     }
 
@@ -57,10 +66,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView tvItem;
+        private RelativeLayout container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvItem = itemView.findViewById(R.id.iv_image);
+            container = itemView.findViewById(R.id.container);
         }
     }
 
@@ -68,5 +79,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     public int getItemViewType(int position) {
         //当集合数据为0或null的时候，返回占位图,数据正在加载中... TYPE_EMPTY
         return super.getItemViewType(position);
+    }
+
+    private OnAlbumItemClickListener listener;
+
+    public void setOnAlumItemClickListener(OnAlbumItemClickListener l) {
+        listener = l;
+
+    }
+
+    public interface OnAlbumItemClickListener {
+        void onAlbumItemClick(int position);
     }
 }

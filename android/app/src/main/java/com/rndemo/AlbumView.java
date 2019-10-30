@@ -72,11 +72,17 @@ public class AlbumView extends LinearLayout {
         //初始化adapter,
         mRecyclerView = new RecyclerView(context);
         adapter = new AlbumAdapter(context, alist);
+        adapter.setOnAlumItemClickListener(new AlbumAdapter.OnAlbumItemClickListener() {
+            @Override
+            public void onAlbumItemClick(int position) {
+                Toast.makeText(context, "点击了" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 //        mAdapter = new AlbumMediaAdapter(context, mSelectionProvider.provideSelectedItemCollection(), mRecyclerView);
         //添加RecyclerView
         LayoutParams lp = new LayoutParams(-1, -1);
         mRecyclerView.setLayoutParams(lp);
-        linearLayoutManager = new GridLayoutManager(context, 4);
+        linearLayoutManager = new GridLayoutManager(context, 3);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(adapter);
         addView(mRecyclerView);
@@ -129,67 +135,40 @@ public class AlbumView extends LinearLayout {
             Log.d("AlbumView", "检测到没有内存卡");
             return;
         }
-//        alist = new ArrayList<>();
-//        showLoading();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                ContentResolver mContentResolver = context.getContentResolver();
-
-                Cursor mCursor = mContentResolver.query(mImageUri, null,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or " +
-                                MediaStore.Images.Media.MIME_TYPE + "=? or " +
-                                MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[]{"image/jpeg", "image/png", "image/jpg"},
-                        MediaStore.Images.Media.DATE_TAKEN + " DESC");//获取图片的cursor，按照时间倒序（发现没卵用)
-
-                int count = mCursor.getCount();
-                Log.d("AlbumView", "count=" + count);
-                while (mCursor.moveToNext()) {
-                    String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));// 1.获取图片的路径
-                    File parentFile = new File(path).getParentFile();
-                    if (parentFile == null)
-                        continue;//不获取sd卡根目录下的图片
-                    String parentPath = parentFile.getAbsolutePath();//2.获取图片的文件夹信息
-                    String parentName = parentFile.getName();
-                    ImageFloder imageFloder;//自定义一个model，来保存图片的信息
-//                    Log.d("AlbumView", "parentName-" + parentName);
-//                    Log.d("AlbumView", "path=" + path);
-                    AlbumEntity albumEntity = new AlbumEntity();
-                    albumEntity.url = path;
-                    alist.add(albumEntity);
-                    //这个操作，可以提高查询的效率，将查询的每一个图片的文件夹的路径保存到集合中，
-                    //如果存在，就直接查询下一个，避免对每一个文件夹进行查询操作
-//                    if (mDirPaths.contains(parentPath)) {
-//                        continue;
-//                    } else {
-//                        mDirPaths.add(parentPath);//将父路径添加到集合中
-//                        imageFloder = new ImageFloder();
-//                        imageFloder.setFirstImagePath(path);
-//                        imageFloder.setDir(parentPath);
-//                        imageFloder.setName(parentName);
-//                    }
-//                    List<String> strings = null;
-//                    try {
-////                        strings =  Arrays.asList(parentFile.list(getFileterImage()));
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    int picSize = strings.size();//获取每个文件夹下的图片个数
-//                    imageFloder.setCount(picSize);//传入每个相册的图片个数
-//                    mImageFloders.add(imageFloder);//添加每一个相册
-                    //获取图片最多的文件夹信息（父目录对象和个数，使得刚开始显示的是最多图片的相册
-//                    if (picSize > mPicsSize) {
-//                        mPicsSize = picSize;
-//                        mImgDir = parentFile;
-//                    }
-                }
-                mCursor.close();
-                mDirPaths = null;
-                mHandler.sendEmptyMessage(1);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//                ContentResolver mContentResolver = context.getContentResolver();
+//
+//                Cursor mCursor = mContentResolver.query(mImageUri, null,
+//                        MediaStore.Images.Media.MIME_TYPE + "=? or " +
+//                                MediaStore.Images.Media.MIME_TYPE + "=? or " +
+//                                MediaStore.Images.Media.MIME_TYPE + "=?",
+//                        new String[]{"image/jpeg", "image/png", "image/jpg"},
+//                        MediaStore.Images.Media.DATE_TAKEN + " DESC");//获取图片的cursor，按照时间倒序（发现没卵用)
+//
+//                int count = mCursor.getCount();
+//                Log.d("AlbumView", "count=" + count);
+//                while (mCursor.moveToNext()) {
+//                    String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));// 1.获取图片的路径
+//                    File parentFile = new File(path).getParentFile();
+//                    if (parentFile == null)
+//                        continue;//不获取sd卡根目录下的图片
+//                    String parentPath = parentFile.getAbsolutePath();//2.获取图片的文件夹信息
+//                    String parentName = parentFile.getName();
+//                    ImageFloder imageFloder;//自定义一个model，来保存图片的信息
+////                    Log.d("AlbumView", "parentName-" + parentName);
+////                    Log.d("AlbumView", "path=" + path);
+//                    AlbumEntity albumEntity = new AlbumEntity();
+//                    albumEntity.url = path;
+//                    alist.add(albumEntity);
+//                }
+//                mCursor.close();
+//                mDirPaths = null;
+//                mHandler.sendEmptyMessage(1);
+//            }
+//        }).start();
     }
 
     public static void getAllImages(Context context, AlbumCallback callback) {
@@ -197,7 +176,6 @@ public class AlbumView extends LinearLayout {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                Log.d("Album", "pre");
             }
 
             @Override
@@ -216,7 +194,6 @@ public class AlbumView extends LinearLayout {
                 if (cursor1 == null) return null;
                 cursor1.moveToFirst();
                 int photoCount = cursor1.getInt(0);
-                Log.d("AlbumView", "count---" + photoCount);
                 //一次扫描500张
 //                String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
                 int index = 0;
@@ -245,8 +222,7 @@ public class AlbumView extends LinearLayout {
                 if (albumEntities == null || albumEntities.size() == 0) {
                     return;
                 }
-                Toast.makeText(context,"完成了",Toast.LENGTH_SHORT).show();
-                Log.d("Album", "over");
+                Toast.makeText(context, "完成了", Toast.LENGTH_SHORT).show();
                 callback.onSuccess(albumEntities);
             }
         }.executeX();
