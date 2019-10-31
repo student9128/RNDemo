@@ -3,6 +3,8 @@ package com.rndemo;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -76,6 +78,18 @@ public class AlbumView extends LinearLayout {
             @Override
             public void onAlbumItemClick(int position) {
                 Toast.makeText(context, "点击了" + position, Toast.LENGTH_SHORT).show();
+                Log.d("AlbumView", "alist.size=" + alist.size());
+                AlbumEntity albumEntity = alist.get(position);
+                String url = albumEntity.url;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                String pathName;
+                Bitmap bitmap = BitmapFactory.decodeFile(url,options);
+                int height = options.outHeight;
+                int width = options.outWidth;
+                Log.d("AlbumView", "width=" + width + ", height=" + height);
+                Log.d("AlbumView",albumEntity.toString());
+
             }
         });
 //        mAdapter = new AlbumMediaAdapter(context, mSelectionProvider.provideSelectedItemCollection(), mRecyclerView);
@@ -206,8 +220,20 @@ public class AlbumView extends LinearLayout {
                     index += cursor.getCount();
                     while (cursor.moveToNext()) {
                         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));// 1.获取图片的路径
+                        String size = cursor.getString(cursor.getColumnIndex("_size"));
+                        String mime_type = cursor.getString(cursor.getColumnIndex("mime_type"));
+                        String display_name = cursor.getString(cursor.getColumnIndex("_display_name"));
+                        String dateAdded = cursor.getString(cursor.getColumnIndex("date_added"));
+                        String dateModified = cursor.getString(cursor.getColumnIndex("date_modified"));
+                        String datetaken = cursor.getString(cursor.getColumnIndex("datetaken"));
+//                        Log.d("AlbumView", "size=" + size + ", mimetype=" + mime_type+", displayName="+display_name+", dateAdd="+dateAdded+", dateModified="+dateModified+", dateTaken="+datetaken);
                         AlbumEntity albumEntity = new AlbumEntity();
                         albumEntity.url = path;
+                        albumEntity.size=size;
+                        albumEntity.mimeType=mime_type;
+                        albumEntity.displayName=display_name;
+                        albumEntity.dateAdded = dateAdded;
+                        albumEntity.dateTaken=datetaken;
                         albumEntityList.add(albumEntity);
                     }
                     cursor.close();
