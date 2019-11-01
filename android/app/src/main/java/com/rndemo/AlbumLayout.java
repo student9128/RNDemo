@@ -9,12 +9,15 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +26,7 @@ import java.util.Map;
  */
 public class AlbumLayout extends ViewGroupManager<AlbumView> {
     public static final String REACT_CLASS = "Album";
-    public static final String CLICK_EVENT = "AlbumLayout_click_event";
+    public static final String CLICK_EVENT = "photoApply";
 
     @NonNull
     @Override
@@ -55,7 +58,7 @@ public class AlbumLayout extends ViewGroupManager<AlbumView> {
     @Nullable
     @Override
     public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
-                return MapBuilder.<String, Object>builder()
+        return MapBuilder.<String, Object>builder()
                 .put(CLICK_EVENT, MapBuilder.of("phasedRegistrationNames",
                         MapBuilder.of("bubbled", "onItemClick"))).build();
     }
@@ -73,14 +76,21 @@ public class AlbumLayout extends ViewGroupManager<AlbumView> {
             }
 
             @Override
-            public void photoItemChecked(AlbumEntity albumEntity) {
-                WritableMap map = Arguments.createMap();
-                map.putString("path",albumEntity.url);
-                map.putString("size",albumEntity.size);
-                map.putString("mimeType", albumEntity.mimeType);
-                map.putInt("isChecked", albumEntity.isSelect);
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(),CLICK_EVENT,map);
+            public void photoItemChecked(List<AlbumEntity> albumEntityList) {
+                WritableArray array = Arguments.createArray();
+                for (AlbumEntity albumEntity : albumEntityList) {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("path", albumEntity.url);
+                    map.putString("size", albumEntity.size);
+                    map.putString("mimeType", albumEntity.mimeType);
+                    map.putInt("isChecked", albumEntity.isSelect);
+                    array.pushMap(map);
+                }
+//                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), CLICK_EVENT, map);
+                //数据比较多，所以失效
+                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(CLICK_EVENT,array);
             }
+
         });
     }
 }

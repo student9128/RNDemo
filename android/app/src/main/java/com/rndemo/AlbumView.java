@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -12,7 +13,11 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,10 +27,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rndemo.util.DisplayUtils;
 import com.zhihu.matisse.internal.ui.MediaSelectionFragment;
 import com.zhihu.matisse.internal.ui.adapter.AlbumMediaAdapter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,6 +50,8 @@ public class AlbumView extends LinearLayout {
     private List<String> mDirPaths = new ArrayList<>();
     private ArrayList<AlbumEntity> alist = new ArrayList<>();
     private AlbumEntity albumEntity;
+    private List<AlbumEntity> photoList = new ArrayList<>();
+    private TextView tvApply;
 
     public AlbumView(Context context) {
         super(context);
@@ -66,6 +75,7 @@ public class AlbumView extends LinearLayout {
 
     private void initView(Context context, FragmentManager fm) {
         this.context = context;
+        setOrientation(LinearLayout.VERTICAL);
 //        for (int i = 0; i < 100; i++) {
 //            mUriList.add("item-" + i);
 //        }
@@ -83,41 +93,83 @@ public class AlbumView extends LinearLayout {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 String pathName;
-                Bitmap bitmap = BitmapFactory.decodeFile(url,options);
+                Bitmap bitmap = BitmapFactory.decodeFile(url, options);
                 int height = options.outHeight;
                 int width = options.outWidth;
                 Log.d("AlbumView", "width=" + width + ", height=" + height);
-                Log.d("AlbumView",albumEntity.toString());
+                Log.d("AlbumView", albumEntity.toString());
 //                setAlbumEntity(albumEntity);
-                if (listener!=null){
+                if (listener != null) {
                     listener.photoItemClick(albumEntity);
                 }
 
             }
 
             @Override
-            public void onAlbumItemChecked(int position, boolean isChecked) {
-                AlbumEntity albumEntity = alist.get(position);
-                albumEntity.isSelect = isChecked?1:0;
+            public void onAlbumItemChecked(boolean isChecked, List<AlbumEntity> checkList) {
 //                String url = albumEntity.url;
 //                BitmapFactory.Options options = new BitmapFactory.Options();
 //                options.inJustDecodeBounds = true;
 //                Bitmap bitmap = BitmapFactory.decodeFile(url,options);
 //                int height = options.outHeight;
 //                int width = options.outWidth;
-                if (listener!=null){
-                    listener.photoItemChecked(albumEntity);
+                photoList = checkList;
+                if (photoList.size() > 0) {
+                    tvApply.setClickable(true);
+                    tvApply.setTextColor(Color.BLACK);
+                } else {
+                    tvApply.setClickable(false);
+                    tvApply.setTextColor(Color.GRAY);
+
                 }
             }
         });
 //        mAdapter = new AlbumMediaAdapter(context, mSelectionProvider.provideSelectedItemCollection(), mRecyclerView);
         //添加RecyclerView
         LayoutParams lp = new LayoutParams(-1, -1);
+        lp.weight = 1;
         mRecyclerView.setLayoutParams(lp);
         linearLayoutManager = new GridLayoutManager(context, 3);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(adapter);
         addView(mRecyclerView);
+        RelativeLayout rlContainer = new RelativeLayout(context);
+        RelativeLayout.LayoutParams l = new RelativeLayout.LayoutParams(-1, DisplayUtils.dip2px(this.context, 60));
+        rlContainer.setLayoutParams(l);
+        TextView tvPreview = new TextView(context);
+        RelativeLayout.LayoutParams lpPreview = new RelativeLayout.LayoutParams(-2, -2);
+        lpPreview.addRule(RelativeLayout.ALIGN_LEFT);
+        lpPreview.addRule(RelativeLayout.CENTER_VERTICAL);
+        lpPreview.leftMargin = DisplayUtils.dip2px(context, 16);
+        tvPreview.setLayoutParams(lpPreview);
+        tvPreview.setText("预览");
+        tvPreview.setTextSize(16);
+        tvPreview.setGravity(Gravity.RIGHT);
+        tvPreview.setClickable(false);
+        tvPreview.setTextColor(Color.GRAY);
+        rlContainer.addView(tvPreview);
+        tvApply = new TextView(context);
+        RelativeLayout.LayoutParams tvLp = new RelativeLayout.LayoutParams(-2, -2);
+        tvLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tvLp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        tvLp.rightMargin = DisplayUtils.dip2px(context, 16);
+        tvApply.setLayoutParams(tvLp);
+        tvApply.setText("使用");
+        tvApply.setTextSize(16);
+        tvApply.setGravity(Gravity.RIGHT);
+        tvApply.setClickable(false);
+        tvApply.setTextColor(Color.GRAY);
+        rlContainer.addView(tvApply);
+        addView(rlContainer);
+        tvApply.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.photoItemChecked(photoList);
+                }
+            }
+        });
+
 //        getImages();
         getAllImages(context, new AlbumCallback() {
             @Override
@@ -127,10 +179,12 @@ public class AlbumView extends LinearLayout {
             }
         });
     }
-    public void setAlbumEntity(AlbumEntity a){
+
+    public void setAlbumEntity(AlbumEntity a) {
         albumEntity = a;
     }
-    public AlbumEntity getEntity(){
+
+    public AlbumEntity getEntity() {
         return albumEntity;
 
     }
@@ -254,11 +308,11 @@ public class AlbumView extends LinearLayout {
 //                        Log.d("AlbumView", "size=" + size + ", mimetype=" + mime_type+", displayName="+display_name+", dateAdd="+dateAdded+", dateModified="+dateModified+", dateTaken="+datetaken);
                         AlbumEntity albumEntity = new AlbumEntity();
                         albumEntity.url = path;
-                        albumEntity.size=size;
-                        albumEntity.mimeType=mime_type;
-                        albumEntity.displayName=display_name;
+                        albumEntity.size = size;
+                        albumEntity.mimeType = mime_type;
+                        albumEntity.displayName = display_name;
                         albumEntity.dateAdded = dateAdded;
-                        albumEntity.dateTaken=datetaken;
+                        albumEntity.dateTaken = datetaken;
                         albumEntityList.add(albumEntity);
                     }
                     cursor.close();
@@ -286,10 +340,12 @@ public class AlbumView extends LinearLayout {
     public interface PhotoItemClickListener {
         void photoItemClick(AlbumEntity albumEntity);
 
-        void photoItemChecked(AlbumEntity albumEntity);
+        void photoItemChecked(List<AlbumEntity> albumEntityList);
     }
+
     private PhotoItemClickListener listener;
-    public void setOnPhotoItemClickListener(PhotoItemClickListener l){
+
+    public void setOnPhotoItemClickListener(PhotoItemClickListener l) {
         listener = l;
     }
 
