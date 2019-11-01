@@ -14,6 +14,7 @@
         tools:src="@mipmap/ic_launcher" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/cb_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

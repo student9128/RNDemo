@@ -25,9 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zhihu.matisse.internal.ui.MediaSelectionFragment;
 import com.zhihu.matisse.internal.ui.adapter.AlbumMediaAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +42,7 @@ public class AlbumView extends LinearLayout {
     private LinearLayoutManager linearLayoutManager;
     private List<String> mDirPaths = new ArrayList<>();
     private ArrayList<AlbumEntity> alist = new ArrayList<>();
+    private AlbumEntity albumEntity;
 
     public AlbumView(Context context) {
         super(context);
@@ -89,7 +88,26 @@ public class AlbumView extends LinearLayout {
                 int width = options.outWidth;
                 Log.d("AlbumView", "width=" + width + ", height=" + height);
                 Log.d("AlbumView",albumEntity.toString());
+//                setAlbumEntity(albumEntity);
+                if (listener!=null){
+                    listener.photoItemClick(albumEntity);
+                }
 
+            }
+
+            @Override
+            public void onAlbumItemChecked(int position, boolean isChecked) {
+                AlbumEntity albumEntity = alist.get(position);
+                albumEntity.isSelect = isChecked?1:0;
+//                String url = albumEntity.url;
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inJustDecodeBounds = true;
+//                Bitmap bitmap = BitmapFactory.decodeFile(url,options);
+//                int height = options.outHeight;
+//                int width = options.outWidth;
+                if (listener!=null){
+                    listener.photoItemChecked(albumEntity);
+                }
             }
         });
 //        mAdapter = new AlbumMediaAdapter(context, mSelectionProvider.provideSelectedItemCollection(), mRecyclerView);
@@ -108,6 +126,13 @@ public class AlbumView extends LinearLayout {
                 adapter.updateData(albumList);
             }
         });
+    }
+    public void setAlbumEntity(AlbumEntity a){
+        albumEntity = a;
+    }
+    public AlbumEntity getEntity(){
+        return albumEntity;
+
     }
 
     Handler mHandler = new Handler() {
@@ -257,5 +282,16 @@ public class AlbumView extends LinearLayout {
     public interface AlbumCallback {
         void onSuccess(ArrayList<AlbumEntity> albumList);
     }
+
+    public interface PhotoItemClickListener {
+        void photoItemClick(AlbumEntity albumEntity);
+
+        void photoItemChecked(AlbumEntity albumEntity);
+    }
+    private PhotoItemClickListener listener;
+    public void setOnPhotoItemClickListener(PhotoItemClickListener l){
+        listener = l;
+    }
+
 
 }

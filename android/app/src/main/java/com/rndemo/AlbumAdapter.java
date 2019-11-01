@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +58,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 }
             }
         });
+        holder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (listener != null) {
+                    listener.onAlbumItemChecked(position, isChecked);
+                }
+            }
+        });
 
     }
 
@@ -67,11 +77,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView tvItem;
         private RelativeLayout container;
+        private AppCompatCheckBox checkView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvItem = itemView.findViewById(R.id.iv_image);
             container = itemView.findViewById(R.id.container);
+            checkView = itemView.findViewById(R.id.cb_checkBox);
         }
     }
 
@@ -90,5 +102,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     public interface OnAlbumItemClickListener {
         void onAlbumItemClick(int position);
+
+        void onAlbumItemChecked(int position, boolean isChecked);
     }
 }
