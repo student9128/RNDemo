@@ -10,8 +10,9 @@ import {
   Animated,
   I18nManager
 } from 'react-native'
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer,Themed } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import {AppearanceProvider} from 'react-native-appearance'
 import TestScreen from './src/testScreen'
 import HomeScreen from './src/homeScreen'
 import ReactNativeInteractionScreen from './src/reactNativeInteractionScreen'
@@ -154,7 +155,7 @@ export class App extends Component {
   render() {
     return <View style={{ flex: 1 }}>
       <StatusBar backgroundColor={Colors.colorPrimaryDark} />
-      <AppContainer />
+      <AppContainer theme="light" />
     </View>
   }
 }
