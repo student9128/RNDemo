@@ -2,6 +2,7 @@ package com.rndemo;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Kevin on 2019-10-28<br/>
@@ -69,15 +71,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         holder.checkView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (checkList.size()>=9){
+                if (isChecked && checkList.size() >= 9) {
                     holder.checkView.setChecked(false);
 //                    holder.checkView.setClickable(false);
 //                    holder.checkView.setEnabled(false);
-                    Toast.makeText(context,"最多只能选择9张",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "最多只能选择9张", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 albumEntity.isSelect = isChecked ? 1 : 0;
                 if (isChecked) {
+                    holder.tvItem.setColorFilter(ContextCompat.getColor(context, R.color.overlay_color), PorterDuff.Mode.SRC_ATOP);
                     checkList.add(albumEntity);
                 } else {
 //                    for (AlbumEntity a : photoList) {
@@ -86,17 +89,18 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 //                    }
                     //   java.util.ConcurrentModificationException
                     //        at java.util.ArrayList$Itr.next(ArrayList.java:860)
+                    holder.tvItem.setColorFilter(ContextCompat.getColor(context, R.color.overlay_false), PorterDuff.Mode.DST);
                     Iterator<AlbumEntity> iterator = checkList.iterator();
                     while (iterator.hasNext()) {
                         AlbumEntity next = iterator.next();
-                        if (next.url==albumEntity.url){
-                            checkList.remove(albumEntity);
+                        if (next.url.equals(albumEntity.url)) {
+                            iterator.remove();
                         }
                     }
 
                 }
                 if (listener != null) {
-                    listener.onAlbumItemChecked(isChecked,checkList);
+                    listener.onAlbumItemChecked(isChecked, checkList);
                 }
             }
         });
@@ -137,6 +141,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     public interface OnAlbumItemClickListener {
         void onAlbumItemClick(int position);
 
-        void onAlbumItemChecked(boolean isChecked,List<AlbumEntity> checkList);
+        void onAlbumItemChecked(boolean isChecked, List<AlbumEntity> checkList);
     }
 }
