@@ -24,6 +24,7 @@ import Colors from './src/common/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ParamScreen from './src/react-navigation/paramScreen'
 import ScreenModule from './src/screens-module/index'
+import DrawerScreen from './src/react-navigation/drawerScreen'
 
 const AppNavigator = createStackNavigator({
   ...ScreenModule,
@@ -58,6 +59,7 @@ const AppNavigator = createStackNavigator({
   },
   SceneTwo: {
     screen: SceneTwoScreen,
+  
     navigationOptions: () => ({
       header: null
     })
@@ -74,6 +76,12 @@ const AppNavigator = createStackNavigator({
       title: '自定义相册'
     })
 
+  },
+  DrawerScreen:{
+    screen:DrawerScreen,
+    navigationOptions: () => ({
+      header: null
+    })
   }
 
 }, {

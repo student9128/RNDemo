@@ -41,6 +41,8 @@ class ReactNavigationScreen extends Component {
         onPress={()=>{this.props.navigation.navigate('ParamScreen',{params:'Hello,Navigation~'})}}/>
            <TextButton title='修改主题'
         onPress={()=>{this._toggleTheme()}}/>
+           <TextButton title='Drawer Screen'
+        onPress={()=>{this.props.navigation.navigate('DrawerScreen')}}/>
       </View>
         <ThemeContext.Provider
         value={{theme:this.state.theme,toggleTheme:this._toggleTheme}}>
