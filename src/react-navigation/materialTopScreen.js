@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,Dimensions } from 'react-native';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import { StackActions,NavigationActions } from 'react-navigation';
 import TextButton from '../common/TextButton'
+import Colors from '../common/colors';
 class SettingsScreen extends React.Component {
     render() {
       return (
@@ -27,16 +28,33 @@ class SettingsScreen extends React.Component {
       );
     }
   }
+  const width = Dimensions.get('window').width
+  const height = Dimensions.get('window').height
 const MaterialTopScreen = createMaterialTopTabNavigator({
     Home: HomeScreen,
     Settings: SettingsScreen,
 },{
     initialRouteName:'Home',
     tabBarOptions:{
-        activeTintColor:'#009688',
-        inactiveTintColor:'gray',
+        activeTintColor:Colors.colorPrimary,
+        inactiveTintColor:Colors.gray,
         tabStyle:{backgroundColor:'#fff'},
         upperCaseLabel:false,
+        style: {
+            backgroundColor: '#fff',
+            shadowColor: '#fff',
+            elevation:1,
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            }},
+            indicatorStyle: {
+                backgroundColor: Colors.colorAccent,
+                height: 1,
+                marginBottom: -1,
+                width:width/8,
+                marginHorizontal:width*3/16,
+              },
         // indicatorStyle:{width:3}
     }
 })
