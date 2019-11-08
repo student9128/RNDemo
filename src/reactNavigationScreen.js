@@ -31,18 +31,20 @@ class ReactNavigationScreen extends Component {
     return (
       <View style={{flex:1}}>
       <View style={Styles.commonContainer}>
-        <TextButton title='使用场景一'
-        onPress={()=>{this.props.navigation.navigate('SceneOne')}}/>
-        <TextButton title='使用场景二'
-        onPress={()=>{this.props.navigation.navigate('SceneTwo')}}/>
-        <TextButton title='使用场景三'
+        <TextButton title='界面跳转'
         onPress={()=>{this.props.navigation.navigate('ScreenOne')}}/>
         <TextButton title='传参'
         onPress={()=>{this.props.navigation.navigate('ParamScreen',{params:'Hello,Navigation~'})}}/>
+        <TextButton title='底部导航'
+        onPress={()=>{this.props.navigation.navigate('SceneOne')}}/>
+        <TextButton title='底部导航（二）'
+        onPress={()=>{this.props.navigation.navigate('SceneTwo')}}/>
            <TextButton title='修改主题'
         onPress={()=>{this._toggleTheme()}}/>
            <TextButton title='Drawer Screen'
         onPress={()=>{this.props.navigation.navigate('DrawerScreen')}}/>
+           <TextButton title='MaterialTopScreen'
+        onPress={()=>{this.props.navigation.navigate('MaterialTopScreen')}}/>
       </View>
         <ThemeContext.Provider
         value={{theme:this.state.theme,toggleTheme:this._toggleTheme}}>

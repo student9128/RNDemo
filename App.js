@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ParamScreen from './src/react-navigation/paramScreen'
 import ScreenModule from './src/screens-module/index'
 import DrawerScreen from './src/react-navigation/drawerScreen'
+import MaterialTopScreen from './src/react-navigation/materialTopScreen'
 
 const AppNavigator = createStackNavigator({
   ...ScreenModule,
@@ -82,6 +83,9 @@ const AppNavigator = createStackNavigator({
     navigationOptions: () => ({
       header: null
     })
+  },
+  MaterialTopScreen:{
+    screen:MaterialTopScreen
   }
 
 }, {
