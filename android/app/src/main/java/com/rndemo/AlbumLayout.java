@@ -38,7 +38,7 @@ public class AlbumLayout extends ViewGroupManager<AlbumView> {
     @Override
     protected AlbumView createViewInstance(@NonNull ThemedReactContext reactContext) {
         FragmentActivity currentActivity = (FragmentActivity) reactContext.getCurrentActivity();
-        AlbumView albumView = new AlbumView(reactContext, currentActivity.getSupportFragmentManager());
+        AlbumView albumView = new AlbumView(reactContext.getCurrentActivity(), currentActivity.getSupportFragmentManager());
         LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(300, 500);
         albumView.setLayoutParams(ll);
 //        albumView.setOnPhotoItemClickListener(new AlbumView.PhotoItemClickListener() {

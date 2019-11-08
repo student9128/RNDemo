@@ -1,12 +1,15 @@
 package com.rndemo;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -21,12 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.react.modules.core.PermissionAwareActivity;
+import com.facebook.react.modules.core.PermissionListener;
 import com.rndemo.util.AlbumUtils;
 import com.rndemo.util.DisplayUtils;
 import com.zhihu.matisse.internal.ui.MediaSelectionFragment;
@@ -172,6 +178,32 @@ public class AlbumView extends LinearLayout {
         });
 
 //        getImages();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ((PermissionAwareActivity) context).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100, new PermissionListener() {
+                    @Override
+                    public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                        if (100 == requestCode) {
+                            int length = grantResults.length;
+                            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                                getPhotos(context);
+                            }
+                        }
+                        return true;
+                    }
+                });
+            } else {
+                getPhotos(context);
+            }
+
+        } else {
+
+            getPhotos(context);
+        }
+    }
+
+    private void getPhotos(Context context) {
         AlbumUtils.getAllImages(context, new AlbumCallback() {
             @Override
             public void onSuccess(ArrayList<AlbumEntity> albumList) {
