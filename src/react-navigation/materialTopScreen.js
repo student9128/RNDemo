@@ -4,11 +4,13 @@ import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import { StackActions,NavigationActions } from 'react-navigation';
 import TextButton from '../common/TextButton'
 import Colors from '../common/colors';
+import BackButton from "../react-navigation/withNav";
 class SettingsScreen extends React.Component {
     render() {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Settings!</Text>
+          <BackButton/>
         </View>
       );
     }
